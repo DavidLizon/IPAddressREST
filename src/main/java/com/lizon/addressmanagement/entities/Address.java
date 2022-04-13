@@ -1,7 +1,8 @@
-package com.lizon.addressmanagement;
+package com.lizon.addressmanagement.entities;
 
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,8 +14,10 @@ public class Address {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String ipaddress;
-	private Boolean acquired;
+	
+	@Column(name = "ip_address")
+	private String ipAddress;
+	private Boolean available;
 	
 	/* ----------------------------------------------------------------------------
 	Constructors
@@ -34,25 +37,25 @@ public class Address {
 		this.id = id;
 	}
 
-	public String getIpaddress() {
-		return ipaddress;
+	public String getIpAddress() {
+		return ipAddress;
 	}
 
-	public void setIpaddress(String ipaddress) {
-		this.ipaddress = ipaddress;
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
 	}
 
-	public Boolean getAcquired() {
-		return acquired;
+	public Boolean getAvailable() {
+		return available;
 	}
 
-	public void setAcquired(Boolean acquired) {
-		this.acquired = acquired;
+	public void setAvailable(Boolean available) {
+		this.available = available;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(acquired, id, ipaddress);
+		return Objects.hash(available, id, ipAddress);
 	}
 
 	@Override
@@ -64,12 +67,12 @@ public class Address {
 		if (getClass() != obj.getClass())
 			return false;
 		Address other = (Address) obj;
-		return Objects.equals(acquired, other.acquired) && id == other.id && Objects.equals(ipaddress, other.ipaddress);
+		return Objects.equals(available, other.available) && id == other.id && Objects.equals(ipAddress, other.ipAddress);
 	}
 
 	@Override
 	public String toString() {
-		return "Addresses [id=" + id + ", ipaddress=" + ipaddress + ", acquired=" + acquired + "]";
+		return "Addresses [id=" + id + ", ipAddress=" + ipAddress + ", available=" + available + "]";
 	}
 	
 }

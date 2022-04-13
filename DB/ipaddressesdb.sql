@@ -22,8 +22,8 @@ DROP TABLE IF EXISTS `address` ;
 
 CREATE TABLE IF NOT EXISTS `address` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `ipaddress` VARCHAR(45) NOT NULL,
-  `acquired` TINYINT NOT NULL,
+  `ip_address` VARCHAR(45) NOT NULL,
+  `available` TINYINT NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -43,8 +43,8 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `ipaddressesdb`;
-INSERT INTO `address` (`id`, `ipaddress`, `acquired`) VALUES (1, '10.0.0.1', 1);
-INSERT INTO `address` (`id`, `ipaddress`, `acquired`) VALUES (2, '10.0.0.2', 0);
+INSERT INTO `address` (`id`, `ip_address`, `available`) VALUES (1, '10.0.0.1', 1);
+INSERT INTO `address` (`id`, `ip_address`, `available`) VALUES (2, '10.0.0.2', 0);
 
 COMMIT;
 
