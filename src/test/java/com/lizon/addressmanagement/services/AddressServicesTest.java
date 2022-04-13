@@ -12,12 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.lizon.addressmanagement.entities.Address;
+import com.lizon.addressmanagement.repository.AddressRepository;
 
 @SpringBootTest
 class AddressServicesTest {
 
 	@Autowired
 	private AddressService addressSvc;
+	
+	@Autowired
+	private AddressRepository addressRepo;
 	
 	@AfterEach
 	void tearDown() throws Exception {
@@ -45,10 +49,30 @@ class AddressServicesTest {
 		assertEquals("10.0.0.1: available", ipAddress);
 	}
 	
+	
+	// Test stores availability of address 10.0.0.2, changes it's availability, and reverts the 
+	// availability back to the initial state after the test is complete.
 	@Test
 	void test_change_ip_address_status_change() {
-		Address ipAddress = addressSvc.updateIpAddressStatus("10.0.0.2");
+		Address ipAddress = addressSvc.findIPAddress("10.0.0.2");
+		boolean initialStatus = ipAddress.getAvailable();
+		
+		ipAddress.setAvailable(false);
+		addressRepo.save(ipAddress);
+		ipAddress = addressSvc.updateIpAddressStatus("10.0.0.2");
 		assertNotNull(ipAddress);
 		assertEquals(true, ipAddress.getAvailable());
+		
+		ipAddress.setAvailable(initialStatus);
+		addressRepo.save(ipAddress);
+	}
+	
+	@Test
+	void test_add_ip_address_range() {
+		List<Address> addressRange = addressSvc.addAddresses("10.0.0.10", "20");
+		assertNotNull(addressRange);
+		assertTrue(addressRange.size() == 11);
+		assertEquals(true, addressSvc.findIPAddress("10.0.0.10").getAvailable());
+		assertEquals(true, addressSvc.findIPAddress("10.0.0.20").getAvailable());
 	}
 }

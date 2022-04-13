@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,5 +42,13 @@ public class AddressController {
 			@PathVariable String addressId
 			) {
 		return addressService.updateIpAddressStatus(addressId);
+	}
+	
+	@PostMapping("add/{cidrStart}/{cidrEnd}")
+	private List<Address> addIpAddresses(
+			@PathVariable String cidrStart,
+			@PathVariable String cidrEnd			
+			) {
+		return addressService.addAddresses(cidrStart, cidrEnd);
 	}
 }
