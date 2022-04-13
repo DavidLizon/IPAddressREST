@@ -32,9 +32,23 @@ class AddressServicesTest {
 	}
 
 	@Test
-	void test_find_ip_addresses() {
+	void test_find_ip_address() {
 		Address ipAddress = addressSvc.findIPAddress("10.0.0.1");
 		assertNotNull(ipAddress);
 		assertEquals(1, ipAddress.getId());
+	}
+	
+	@Test
+	void test_ip_address_status() {
+		String ipAddress = addressSvc.ipAddressStatus("10.0.0.1");
+		assertNotNull(ipAddress);
+		assertEquals("10.0.0.1: available", ipAddress);
+	}
+	
+	@Test
+	void test_change_ip_address_status_change() {
+		Address ipAddress = addressSvc.updateIpAddressStatus("10.0.0.2");
+		assertNotNull(ipAddress);
+		assertEquals(true, ipAddress.getAvailable());
 	}
 }
