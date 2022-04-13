@@ -1,5 +1,6 @@
 package com.lizon.addressmanagement.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,6 @@ public class AddressService {
 		return repo.findByIpAddress(addy);
 	}
 	
-//	public boolean ipAddressAvailable(String addy) {
-//		return repo.findByIpAddress(addy).getAvailable();
-//	}
 	public String ipAddressStatus(String addy) {
 		String status = "";
 		Address targetAddress = repo.findByIpAddress(addy);
@@ -38,17 +36,41 @@ public class AddressService {
 	}
 	
 	public Address updateIpAddressStatus(String address) {
-		Address ipAddress = repo.findByIpAddress(address);
-		if(ipAddress.getAvailable() == true) {
-			ipAddress.setAvailable(false);
-			repo.save(ipAddress);
+		Address targetAddress = repo.findByIpAddress(address);
+		if(targetAddress.getAvailable() == true) {
+			targetAddress.setAvailable(false);
+			repo.save(targetAddress);
 		} else {
-			ipAddress.setAvailable(true);
-			repo.save(ipAddress);
+			targetAddress.setAvailable(true);
+			repo.save(targetAddress);
 		}
 		
-		return ipAddress;
+		return targetAddress;
 	}
+	
+//	"10.0.0.10/20"
+	public List<Address> addAddresses(String addressStart, String addressEnd) {
+		List<Address> listNewAddresses = new ArrayList<>();
 
+		String[] ipNotation = addressStart.split("\\.");
+		int startRange = Integer.parseInt(ipNotation[3]);
+		int endRange = Integer.parseInt(addressEnd);
+		
+		
+		for(int i = startRange; i <= endRange; i++) {
+			String addIpAddress = ipNotation[0] + "." + ipNotation[1] + "." + ipNotation[2] + "." + i;
+			
+			if(repo.findByIpAddress(addIpAddress) == null) {
+				Address newAddress = new Address();
+				newAddress.setIpAddress(addIpAddress);
+				newAddress.setAvailable(true);
+				repo.save(newAddress);
+				
+				listNewAddresses.add(newAddress);
+			}
+		}
+		
+		return listNewAddresses;
+	}
 	
 }
